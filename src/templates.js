@@ -1,0 +1,2 @@
+// This file is generated automatically, do not change it!
+module.exports = {"index.md":["# Aufgabenmaterial herunterladen","Um das Aufgabenmeterial für [Wasserzeichen](../) herunterzuladen, gib folgenden Befehl in _ein neues Terminal_ in deinem Codespace ein:","```","```","<MaterialFAQ />"]}
