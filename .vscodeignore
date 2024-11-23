@@ -1,6 +1,10 @@
 .vscode/**
-*.vsix
+node_modules/**
+src/**
 .gitignore
-update-templates.mjs
-.prettierrc
-**/jsconfig.json
+webpack.config.mjs
+**/tsconfig.json
+**/eslint.config.mjs
+**/*.map
+**/*.ts
+*.vsix
