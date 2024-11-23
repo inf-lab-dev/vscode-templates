@@ -1,6 +1,7 @@
 {
-    "name": "inflabs-vscode-templates",
-    "displayName": "inf-lab.dev VsCode Template Renderer",
+    "name": "vscode-templates",
+    "publisher": "inf-lab-dev",
+    "displayName": "inf-lab.dev Template Renderer",
     "description": "Renders the template for various inf-lab.dev tasks in gray.",
     "version": "1.0.0",
     "repository": {
