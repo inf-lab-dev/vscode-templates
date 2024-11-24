@@ -1,4 +1,4 @@
-import { ExtensionContext } from 'vscode';
+import * as vscode from 'vscode';
 import { activate as activateCommand } from './command';
 import { activate as activateRenderer } from './template/renderer';
 
@@ -7,7 +7,7 @@ import { activate as activateRenderer } from './template/renderer';
  *
  * @param context the context to activate within
  */
-export function activate(context: ExtensionContext) {
+export function activate(context: vscode.ExtensionContext) {
     activateCommand(context);
     activateRenderer(context);
 }

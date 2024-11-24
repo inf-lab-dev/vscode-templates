@@ -1,4 +1,4 @@
-import { commands, ExtensionContext, window } from 'vscode';
+import * as vscode from 'vscode';
 import { createTemplate } from './template';
 import { disableTemplate, enableTemplate } from './template/renderer';
 import {
@@ -11,7 +11,7 @@ import {
  * Enables a template after asking the user to select one.
  */
 async function enable() {
-    const editor = window.activeTextEditor!;
+    const editor = vscode.window.activeTextEditor!;
 
     if (!canTemplateBeApplied()) {
         return;
@@ -57,10 +57,10 @@ async function create() {
  *
  * @param context the context to activate within
  */
-export function activate(context: ExtensionContext) {
+export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
-        commands.registerCommand('inflabs.templates.enable', enable),
-        commands.registerCommand('inflabs.templates.disable', disable),
-        commands.registerCommand('inflabs.templates.create', create),
+        vscode.commands.registerCommand('inflabs.templates.enable', enable),
+        vscode.commands.registerCommand('inflabs.templates.disable', disable),
+        vscode.commands.registerCommand('inflabs.templates.create', create),
     );
 }
