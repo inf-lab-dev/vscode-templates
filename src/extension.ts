@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
-import { activate as activateCommand } from './command';
-import { activate as activateRenderer } from './template/renderer';
+import * as commands from './command';
+import * as autoActivation from './template/auto-activation';
+import * as renderer from './template/renderer';
 
 /**
  * Actives the extension.
@@ -8,8 +9,9 @@ import { activate as activateRenderer } from './template/renderer';
  * @param context the context to activate within
  */
 export function activate(context: vscode.ExtensionContext) {
-    activateCommand(context);
-    activateRenderer(context);
+    commands.activate(context);
+    renderer.activate(context);
+    autoActivation.activate(context);
 }
 
 /**

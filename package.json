@@ -69,6 +69,14 @@
             {
                 "command": "inflabs.templates.create",
                 "title": "InfLabs: Create Template from Active Editor"
+            },
+            {
+                "command": "inflabs.templates.autoActivation.disable",
+                "title": "InfLabs: Disable Auto-Activation for Current Document"
+            },
+            {
+                "command": "inflabs.templates.autoActivation.clearDisabled",
+                "title": "InfLabs: Clear all Disabled Auto-Activations"
             }
         ]
     },
