@@ -1,5 +1,5 @@
 import * as diff from 'diff';
-import { TextEditor, window } from 'vscode';
+import * as vscode from 'vscode';
 import { getTemplates, setTemplates } from '../configuration';
 import { enableTemplate } from './renderer';
 
@@ -76,7 +76,7 @@ export function computeTemplateRanges(
  *
  * @param editor the editor to create a template from
  */
-export async function createTemplate(editor: TextEditor) {
+export async function createTemplate(editor: vscode.TextEditor) {
     const templates = getTemplates();
     const fileNameParts = editor.document.uri.path.split('/');
 
@@ -86,7 +86,7 @@ export async function createTemplate(editor: TextEditor) {
     };
 
     if (templates.has(template.name)) {
-        const answer = await window.showInformationMessage(
+        const answer = await vscode.window.showInformationMessage(
             `A template with the name ${template.name} already exists, do you want to overwrite?`,
             'Yes',
             'No',

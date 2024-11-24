@@ -1,4 +1,4 @@
-import { TextEditor, window } from 'vscode';
+import * as vscode from 'vscode';
 import { getTemplates } from './configuration';
 import { Template } from './template';
 
@@ -13,7 +13,7 @@ export async function selectTemplate(
 ): Promise<Template | null> {
     const templates = getTemplates();
 
-    const selectedTemplateName = await window.showQuickPick(
+    const selectedTemplateName = await vscode.window.showQuickPick(
         Array.from(templates.keys()),
         { placeHolder },
     );
@@ -31,11 +31,11 @@ export async function selectTemplate(
  *
  * @returns possibly the active text editor
  */
-export function requireActiveEditor(): TextEditor | null {
-    const editor = window.activeTextEditor;
+export function requireActiveEditor(): vscode.TextEditor | null {
+    const editor = vscode.window.activeTextEditor;
 
     if (!editor) {
-        window.showErrorMessage('No active editor found.');
+        vscode.window.showErrorMessage('No active editor found.');
 
         return null;
     }
@@ -57,7 +57,7 @@ export function canTemplateBeApplied(): boolean {
     const editor = requireActiveEditor();
 
     if (!templates.size) {
-        window.showErrorMessage('No templates found in settings.');
+        vscode.window.showErrorMessage('No templates found in settings.');
 
         return false;
     }

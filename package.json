@@ -3,7 +3,7 @@
     "publisher": "inf-lab-dev",
     "displayName": "inf-lab.dev Template Renderer",
     "description": "Renders the template for various inf-lab.dev tasks in gray.",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/inf-lab-dev/vscode-templates.git"
@@ -69,6 +69,14 @@
             {
                 "command": "inflabs.templates.create",
                 "title": "InfLabs: Create Template from Active Editor"
+            },
+            {
+                "command": "inflabs.templates.autoActivation.disable",
+                "title": "InfLabs: Disable Auto-Activation for Current Document"
+            },
+            {
+                "command": "inflabs.templates.autoActivation.clearDisabled",
+                "title": "InfLabs: Clear all Disabled Auto-Activations"
             }
         ]
     },
@@ -78,7 +86,8 @@
         "compile": "webpack",
         "watch": "webpack --watch",
         "package": "webpack --mode production --devtool hidden-source-map",
-        "lint": "eslint src"
+        "lint": "eslint src",
+        "format": "prettier --write ."
     },
     "devDependencies": {
         "@types/diff": "^6.0.0",
