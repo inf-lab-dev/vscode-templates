@@ -1,26 +1,17 @@
-import {
-    ExtensionContext,
-    Range,
-    TextDocument,
-    TextDocumentChangeEvent,
-    TextEditor,
-    window,
-    workspace,
-} from 'vscode';
+import * as vscode from 'vscode';
 import { computeTemplateRanges, Template } from '.';
-import { getAutoActivates } from '../configuration';
 
 /**
  * The decoration that is used for the template content.
  */
-const DECORATION_TYPE = window.createTextEditorDecorationType({
+const DECORATION_TYPE = vscode.window.createTextEditorDecorationType({
     color: 'gray',
 });
 
 /**
  * The currently active templates keyed by their document.
  */
-const activeTemplates = new Map<TextDocument, Template>();
+const activeTemplates = new Map<vscode.TextDocument, Template>();
 
 /**
  * Renders the template for the given document or removes them if
@@ -28,9 +19,9 @@ const activeTemplates = new Map<TextDocument, Template>();
  *
  * @param document the document to render the template possibly for
  */
-function renderForDocument(document: TextDocument) {
+function renderForDocument(document: vscode.TextDocument) {
     const template = activeTemplates.get(document);
-    const editor = window.visibleTextEditors.find(
+    const editor = vscode.window.visibleTextEditors.find(
         (editor) => editor.document === document,
     );
 
@@ -46,33 +37,13 @@ function renderForDocument(document: TextDocument) {
 
     const templateRanges = computeTemplateRanges(template, document.getText());
     const decorationRanges = templateRanges.map(({ start, end }) => ({
-        range: new Range(document.positionAt(start), document.positionAt(end)),
+        range: new vscode.Range(
+            document.positionAt(start),
+            document.positionAt(end),
+        ),
     }));
 
     editor.setDecorations(DECORATION_TYPE, decorationRanges);
-}
-
-/**
- * Enables a template based on the auto-activates if there is no
- * template active for the given document
- *
- * @param document the document to possibly enable a teplate for
- */
-function triggerAutoActivates(document: TextDocument) {
-    if (activeTemplates.has(document)) {
-        return;
-    }
-
-    const autoActivates = getAutoActivates();
-    const uri = document.uri.toString();
-
-    for (const [pattern, template] of autoActivates) {
-        if (uri.endsWith(pattern)) {
-            enableTemplate(document, template);
-
-            break;
-        }
-    }
 }
 
 /**
@@ -80,11 +51,12 @@ function triggerAutoActivates(document: TextDocument) {
  *
  * @param visibleEditors the visible editors
  */
-function onVisibleTextEditorsChanged(visibleEditors: readonly TextEditor[]) {
+function onVisibleTextEditorsChanged(
+    visibleEditors: readonly vscode.TextEditor[],
+) {
     for (const visibleEditor of visibleEditors) {
         const { document } = visibleEditor;
 
-        triggerAutoActivates(document);
         renderForDocument(document);
     }
 }
@@ -94,8 +66,7 @@ function onVisibleTextEditorsChanged(visibleEditors: readonly TextEditor[]) {
  *
  * @param document the opened document
  */
-function onTextDocumentOpened(document: TextDocument) {
-    triggerAutoActivates(document);
+function onTextDocumentOpened(document: vscode.TextDocument) {
     renderForDocument(document);
 }
 
@@ -104,7 +75,7 @@ function onTextDocumentOpened(document: TextDocument) {
  *
  * @param event the change event
  */
-function onTextDocumentChanged({ document }: TextDocumentChangeEvent) {
+function onTextDocumentChanged({ document }: vscode.TextDocumentChangeEvent) {
     renderForDocument(document);
 }
 
@@ -113,7 +84,7 @@ function onTextDocumentChanged({ document }: TextDocumentChangeEvent) {
  *
  * @param document the closed document
  */
-function onTextDocumentClosed(document: TextDocument) {
+function onTextDocumentClosed(document: vscode.TextDocument) {
     activeTemplates.delete(document);
 }
 
@@ -123,7 +94,10 @@ function onTextDocumentClosed(document: TextDocument) {
  * @param document the document to enable a template for
  * @param template the template to enable
  */
-export function enableTemplate(document: TextDocument, template: Template) {
+export function enableTemplate(
+    document: vscode.TextDocument,
+    template: Template,
+) {
     activeTemplates.set(document, template);
 
     renderForDocument(document);
@@ -134,10 +108,20 @@ export function enableTemplate(document: TextDocument, template: Template) {
  *
  * @param document the document to disable any template for
  */
-export function disableTemplate(document: TextDocument) {
+export function disableTemplate(document: vscode.TextDocument) {
     activeTemplates.delete(document);
 
     renderForDocument(document);
+}
+
+/**
+ * Checks if the given `document` has some active template.
+ *
+ * @param document the document to check
+ * @returns if the given `document` has an active template
+ */
+export function hasActiveTemplate(document: vscode.TextDocument) {
+    return activeTemplates.has(document);
 }
 
 /**
@@ -145,16 +129,13 @@ export function disableTemplate(document: TextDocument) {
  *
  * @param context the context to activate within
  */
-export function activate(context: ExtensionContext) {
+export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
-        window.onDidChangeVisibleTextEditors(onVisibleTextEditorsChanged),
-        workspace.onDidOpenTextDocument(onTextDocumentOpened),
-        workspace.onDidChangeTextDocument(onTextDocumentChanged),
-        workspace.onDidCloseTextDocument(onTextDocumentClosed),
+        vscode.window.onDidChangeVisibleTextEditors(
+            onVisibleTextEditorsChanged,
+        ),
+        vscode.workspace.onDidOpenTextDocument(onTextDocumentOpened),
+        vscode.workspace.onDidChangeTextDocument(onTextDocumentChanged),
+        vscode.workspace.onDidCloseTextDocument(onTextDocumentClosed),
     );
-
-    // auto-activate already open editors
-    for (const editor of window.visibleTextEditors) {
-        triggerAutoActivates(editor.document);
-    }
 }

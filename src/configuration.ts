@@ -1,4 +1,4 @@
-import { workspace } from 'vscode';
+import * as vscode from 'vscode';
 import { Template } from './template';
 
 /**
@@ -6,7 +6,7 @@ import { Template } from './template';
  *
  * @returns the configuration
  */
-const getConfig = () => workspace.getConfiguration('inflabs.templates');
+const getConfig = () => vscode.workspace.getConfiguration('inflabs.templates');
 
 /**
  * Gets the stored templates.
