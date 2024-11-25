@@ -1,0 +1,45 @@
+name: Build VSCode Extension
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            # Checkout the repository code
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            # Set up Node.js environment
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: '16'
+                  cache: npm
+
+            # Install dependencies
+            - name: Install dependencies
+              run: npm ci
+
+            # Run the build process
+            - name: Build extension
+              run: npm run build
+
+            # Get the npm version
+            - name: get-npm-version
+              id: package-version
+              uses: martinbeentjes/npm-get-version-action@v1.3.1
+
+            # Upload artifact
+            - name: Upload artifact
+              uses: actions/upload-artifact@v3
+              with:
+                  name: vscode-templates-v${{ steps.package-version.outputs.current-version }}-${{ github.run_number }}
+                  path: '*.vsix'
