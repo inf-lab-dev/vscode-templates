@@ -1,10 +1,10 @@
 # vscode-templates
 
-A simple vscode extension that can render pre-defined code templates in gray.
+A simple vscode extension that can render pre-defined code templates more opaque than normal code.
 
 ## Usage
 
-This extension shall render all lines that are contributed by a code-template in gray.
+This extension will render all lines that are contributed by a code-template more opaque than normal code.
 
 ### Example Configuration
 
