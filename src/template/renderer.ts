@@ -5,7 +5,7 @@ import { computeTemplateRanges, Template } from '.';
  * The decoration that is used for the template content.
  */
 const DECORATION_TYPE = vscode.window.createTextEditorDecorationType({
-    color: 'gray',
+    opacity: '0.4',
 });
 
 /**
